@@ -75,8 +75,6 @@ class IntegerBase36Field(BigIntegerField):
                 return int(value, 36)
             elif type(value) is int:
                 return value
-        else:
-            print(value)
 
     def python_value(self, value):
         """

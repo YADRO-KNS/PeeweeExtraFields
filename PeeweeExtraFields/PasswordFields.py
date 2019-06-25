@@ -17,17 +17,12 @@ def get_hexdigest(algorithm, salt, raw_password):
     raise ValueError("Got unknown password algorithm type in password.")
 
 
-class PasswordField(CharField):
-    """
-    Parent class for all passwords fields
-    """
-
-    def check(self, value: str) -> bool:
-        algorithm, salt, hsh = value.split('$')
-        return hsh == get_hexdigest(algorithm, salt, value)
+def check_password(encrypted: str, raw_password: str) -> bool:
+    algorithm, salt, hsh = encrypted.split('$')
+    return hsh == get_hexdigest(algorithm, salt, raw_password)
 
 
-class PasswordMD5Field(PasswordField):
+class PasswordMD5Field(CharField):
     """
     Custom Field for Passwords in MD5 encryption.
     """
@@ -45,7 +40,7 @@ class PasswordMD5Field(PasswordField):
             return '%s$%s$%s' % (algorithm, salt, hsh)
 
 
-class PasswordSHA1Field(PasswordField):
+class PasswordSHA1Field(CharField):
     """
     Custom Field for Passwords in SHA1 encryption.
     """
