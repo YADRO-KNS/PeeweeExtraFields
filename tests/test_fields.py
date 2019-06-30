@@ -24,6 +24,11 @@ class BaseModel(Model):
                 local_db.create_tables([model])
 
 
+class PCITable(BaseModel):
+    id = PrimaryKeyField()
+    pci = PCIField()
+
+
 class PassMD5Table(BaseModel):
     id = PrimaryKeyField()
     pass_md5 = PasswordMD5Field()
@@ -68,6 +73,33 @@ class TestDBCreation(TestPeeweeExtraFields):
         self.assertIn(member='passsha1table', container=table_list)
         self.assertIn(member='mactable', container=table_list)
         self.assertIn(member='sastable', container=table_list)
+        self.assertIn(member='pcitable', container=table_list)
+
+
+class TestPCIField(TestPeeweeExtraFields):
+    def test_str_pci_creation_success(self):
+        value = 'abcd:ef:02.0'
+        new = PCITable.create(pci=value)
+        new.save()
+        new_id = new.id
+        self.assertEqual(PCITable.get_by_id(new_id).pci, value.lower())
+
+    def test_int_pci_creation_success(self):
+        value = 46118400032
+        new = PCITable.create(pci=value)
+        new.save()
+        new_id = new.id
+        self.assertEqual(PCITable.get_by_id(new_id).pci, 'abcd:ef:02.0'.lower())
+
+    def test_pci_creation_failure(self):
+        exception = None
+        value = 'abcd:ef:02.z'
+        try:
+            PCITable.create(pci=value)
+        except Exception as error:
+            exception = error
+
+        self.assertEqual(str(exception), "invalid literal for int() with base 16: 'abcdef02z'")
 
 
 class TestMacField(TestPeeweeExtraFields):

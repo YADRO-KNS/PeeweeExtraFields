@@ -1,6 +1,35 @@
 from peewee import *
 
 
+class PCIField(BigIntegerField):
+    """
+    Custom Field for PCI addresses
+    """
+
+    def db_value(self, value):
+        """
+        Translate from str into int
+        :param value: string with PCI address
+        :return: int with PCI value
+        """
+        if value is not None:
+            if type(value) != int:
+                return int(value.replace(':', '').replace('.', ''), 16)
+            else:
+                return value
+
+    def python_value(self, value):
+        """
+        Translate from int into str
+        :param value: int with PCI address value
+        :return: string with PCI address
+        """
+        if value is not None:
+            pci_hex = "{:09x}".format(value)
+            pci_str = pci_hex[0:4] + ":" + pci_hex[4:6] + ":" + pci_hex[6:8] + "." + pci_hex[8]
+            return pci_str
+
+
 class SASField(BigIntegerField):
     """
     Custom Field that Holds SAS addresses.
