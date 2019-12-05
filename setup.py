@@ -8,7 +8,7 @@ with open('requirements.txt') as fp:
 
 setuptools.setup(
     name="PeeweeExtraFields",
-    version="0.0.1",
+    version="0.0.2",
     author="Sergey Parshin",
     author_email="parshinsp@gmail.com",
     description="Collection of Extra Fields for peewee ORM.",
