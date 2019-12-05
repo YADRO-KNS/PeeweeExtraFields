@@ -1,0 +1,11 @@
+/.metadata/
+/.settings/
+/.idea/
+/venv/
+/venv3/
+/build/
+/dist/
+.coverage
+.xml
+*.pyc
+*.egg-info
