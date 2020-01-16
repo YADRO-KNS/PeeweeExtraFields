@@ -16,10 +16,15 @@ def get_hexdigest(algorithm, salt, raw_password):
     """
     salt, raw_password = normalize_string(salt).encode(), normalize_string(raw_password).encode()
     if algorithm == 'md5':
-        return hashlib.md5(salt + raw_password).hexdigest()
+        hash_maker = hashlib.md5()
+        hash_maker.update(salt + raw_password)
+        return hash_maker.hexdigest()
     elif algorithm == 'sha1':
-        return hashlib.sha1(salt + raw_password).hexdigest()
-    raise ValueError("Got unknown password algorithm type in password.")
+        hash_maker = hashlib.sha1()
+        hash_maker.update(salt + raw_password)
+        return hash_maker.hexdigest()
+    else:
+        raise ValueError("Got unknown password algorithm type in password.")
 
 
 def check_password(encrypted: str, raw_password: str) -> bool:
