@@ -44,6 +44,8 @@ class PasswordMD5Field(CharField):
         :return: encoded password
         """
         if value is not None:
+            if len(value.split('$')) == 3 and value.startswith('md5') and len(value.split('$')[1]) == 5 and len(value.split('$')[1]) == 32:
+                return value
             algorithm = 'md5'
             salt = get_hexdigest(algorithm, str(random.random()), str(random.random()))[:5]
             hsh = get_hexdigest(algorithm, salt, value)
